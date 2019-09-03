@@ -5,6 +5,9 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Use the same key for each machine
+  config.ssh.insert_key = false
+
   config.vm.define "ubuntu" do |ubuntu|
     ubuntu.vm.box = "ubuntu/trusty64"
     ubuntu.vm.network "private_network", ip: "192.168.4.10"
