@@ -1,3 +1,4 @@
+---
 - name: remove all ghost containers and networks
   hosts: ghost
   become: True

@@ -1,3 +1,4 @@
+---
 - name: set the nginx config file
   template: src=nginx.conf.j2 dest=/etc/nginx/sites-available/mezzanine.conf
   notify: restart nginx

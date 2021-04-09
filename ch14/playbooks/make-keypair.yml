@@ -1,3 +1,4 @@
+---
 - name: make a keypair
   hosts: localhost
   gather_facts: False

@@ -1,3 +1,4 @@
+---
 - name: raw against packer test
   hosts: packer
   gather_facts: False

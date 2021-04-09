@@ -1,3 +1,4 @@
+---
 version: "2"
 settings:
   conductor_base: debian:jessie

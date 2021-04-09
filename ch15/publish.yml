@@ -1,3 +1,4 @@
+---
 - name: publish images to docker hub
   hosts: localhost
   gather_facts: False

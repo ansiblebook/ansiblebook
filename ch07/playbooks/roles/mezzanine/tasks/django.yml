@@ -1,3 +1,4 @@
+---
 - name: create a logs directory
   file: path="{{ ansible_env.HOME }}/logs" state=directory
 - name: check out the repository on the host

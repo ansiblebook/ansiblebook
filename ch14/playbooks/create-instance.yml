@@ -1,3 +1,4 @@
+---
 - name: start an instance with the packered ami
   hosts: localhost
   gather_facts: False

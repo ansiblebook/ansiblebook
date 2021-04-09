@@ -1,3 +1,4 @@
+---
 - name: find xenial image
   hosts: localhost
   gather_facts: False
