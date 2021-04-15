@@ -1,0 +1,82 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Configure Tower Organization
+  hosts: localhost
+  gather_facts: false
+  collections:
+    - awx.awx
+
+  tasks:
+
+    - name: create organization
+      tower_organization:
+        name: "Tower"
+        description: "Tower organization"
+        state: present
+
+    - name: create inventory
+      tower_inventory:
+        name: "Tower Inventory"
+        description: "Tower infra"
+        organization: "Tower"
+        state: present
+
+    - name: populate inventory
+      tower_host:
+        name: "{{ item }}"
+        inventory: "Tower Inventory"
+        state: present
+      with_items:
+        - 'server01'
+        - 'server02'
+        - 'server03'
+
+    - name: create groups
+      tower_group:
+        name: "{{ item.group }}"
+        inventory: "Tower Inventory"
+        state: present
+        hosts:
+          - "{{ item.host }}"
+      with_items:
+        - group: tower
+          host: 'server03'
+        - group: automationhub
+          host: 'server02'
+        - group: database
+          host: 'server01'
+
+    - name: create project
+      tower_project:
+        name: "test-playbooks"
+        organization: "Tower"
+        scm_type: git
+        scm_url: https://github.com/ansible/test-playbooks.git
+
+    - name: create machine credential
+      tower_credential:
+        name: 'Tower Credential'
+        credential_type: Machine
+        organization: "Tower"
+        inputs:
+          ssh_key_data: "{{ lookup('file', 'files/tower_ed25519') }}"
+
+    - name: create team
+      tower_team:
+        name: "Tower Team"
+        description: "Tower team"
+        organization: "Tower"
+        state: present
+        validate_certs: false
+
+    - name: create job template
+      tower_job_template:
+        name: "Test Job Template"
+        project: "test-playbooks"
+        inventory: "Tower Inventory"
+        credential: 'Tower Credential'
+        playbook: ping.yml
+
+    - name: Launch the Job Template
+      tower_job_launch:
+        job_template: "Test Job Template"
