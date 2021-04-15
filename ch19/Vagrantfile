@@ -61,7 +61,7 @@ Vagrant.configure("2") do |config|
           # Disable default limit to connect to all the servers
           ansible.limit = "all"
           ansible.playbook = "playbook.yml"
-          ansible.verbose = "vv"
+          ansible.verbose = "v"
           ansible.groups = {
             "database" => ["server01"],
             "automationhub" => ["server02"],
