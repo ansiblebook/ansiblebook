@@ -34,11 +34,83 @@
     - tower
     - setup
 
+- name: check if postgres is running
+  delegate_to: "{{ pg_host }}"
+  service_facts:
+  no_log: true
+  tags:
+    - tower
+    - test
+
+- name: display postgres state
+  debug:
+    var: ansible_facts.services['rh-postgresql10-postgresql.service']
+  tags:
+    - tower
+    - test
+
+- name: declare variable for tower_state
+  set_fact:
+    tower_state: 'unknown'
+  tags:
+    - tower
+    - test
+
+- name: check which services are running
+  no_log: true
+  service_facts:
+  tags:
+    - tower
+    - test
+
+- set_fact:
+    tower_state: "{{ ansible_facts.services['ansible-tower.service']['state'] }}"
+  when: ansible_facts.services['ansible-tower.service'] is defined
+  tags:
+    - tower
+    - test
+
 - name: running Tower setup.sh, time for a 10 minute break?
   async: 3600
   poll: 60
   command: bash -lc "cd /tmp/{{ tower_name }} && bash ./setup.sh"
-  when: role == 'primary'
+  when: 
+    - role == 'primary'
+    - tower_state == 'unknown'
   tags:
     - tower
     - setup
+
+- name: verify ports
+  wait_for:
+    port: "{{ item }}"
+  with_items:
+    - 25
+    - 80
+    - 443
+  tags:
+    - tower
+    - test
+
+- name: check again which services are running
+  service_facts:
+  no_log: true
+  tags:
+    - tower
+    - test
+
+- name: display supervisord state
+  debug:
+    var: ansible_facts.services['supervisord.service']
+  tags:
+    - tower
+    - test
+
+- name: verify url
+  uri:
+    url: "https://{{ primary_machine }}/#/login"
+    validate_certs: "{{ tower_validate_certs }}"
+    status_code: 200
+  tags:
+    - tower
+    - test
