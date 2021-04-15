@@ -1,10 +1,8 @@
 ---
 # these are obviously for demo purposes.
-admin_password: 'IT-audited?'
 munin_password: 'IT-audited?'
 vault_postgres_user: 'dba'
 vault_postgres_pass: 'IT-audited?'
 pg_password: "{{ vault_postgres_pass }}"
 redis_password: 'IT-audited?'
-
-ansible_ssh_key: id_rsa
+tower_validate_certs: false

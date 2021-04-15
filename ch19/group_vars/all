@@ -1,4 +1,7 @@
 ---
+# this is obviously for demo purposes.
+admin_password: 'IT-audited?'
+
 primary_machine: "{{ groups.tower[0] }}"
 secondary_machine: "{{ groups.automationhub[0] }}"
 pg_host: "{{ groups.database[0] }}"
