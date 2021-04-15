@@ -1,5 +1,10 @@
 ---
 
-- src: dockpack.base_common
-  version: v0.5.0
-  name: base_common
+roles:
+  - src: dockpack.base_common
+    version: v0.5.0
+    name: base_common
+
+collections:
+  # Install Tower/AWX collection from Ansible Galaxy.
+  - name: awx.awx

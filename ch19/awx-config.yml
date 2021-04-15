@@ -1,0 +1,42 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: configure awx
+  hosts: all
+  become: false
+  gather_facts: false
+
+  vars:
+    tower_host: "{{ groups.tower[0] }}"
+    # yamllint disable-line rule:line-length
+    cfg: "-k --conf.host https://{{ tower_host }} --conf.user {{ tower_user|default('admin', true) }}"
+
+  tasks:
+    - name: install collections
+      delegate_to: localhost
+      run_once: true
+      changed_when: true
+      command: "ansible-galaxy collection install -f -p collections -r roles/requirements.yml"
+
+    - name: login to Tower
+      delegate_to: localhost
+      run_once: true
+      no_log: true
+      changed_when: false
+      command: "awx {{ cfg }} --conf.password {{ admin_password }} -k login"
+      register: awx_login
+
+    - name: set tower_token
+      delegate_to: localhost
+      run_once: true
+      set_fact:
+        tower_token: "{{ awx_login.stdout|from_json|json_query('token') }}"
+
+    - name: create ~/.tower_cli.cfg
+      delegate_to: localhost
+      run_once: true
+      template:
+        src: tower_cli.cfg
+        dest: "~/.tower_cli.cfg"
+        mode: 0600
+
