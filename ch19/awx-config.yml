@@ -16,6 +16,7 @@
       delegate_to: localhost
       run_once: true
       changed_when: true
+      # yamllint disable-line rule:line-length
       command: "ansible-galaxy collection install -f -p collections -r roles/requirements.yml"
 
     - name: login to Tower
@@ -39,4 +40,3 @@
         src: tower_cli.cfg
         dest: "~/.tower_cli.cfg"
         mode: 0600
-
