@@ -90,19 +90,6 @@
         "forwarded_port": "8008"
     },
     {
-        "name": "hirsute",
-        "cpus": 1,
-        "distro": "ubuntu",
-        "family": "debian",
-        "gui": false,
-        "box": "ubuntu/hirsute64",
-        "ip_addr": "192.168.56.9",
-        "memory": "1024",
-        "no_share": false,
-        "app_port": "80",
-        "forwarded_port": "8009"
-    },
-    {
         "name": "impish",
         "cpus": 1,
         "distro": "ubuntu",
