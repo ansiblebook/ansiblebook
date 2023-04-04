@@ -24,6 +24,7 @@
 
       - name: Run smoke tests
         script: smoke-tests.sh
+        register: upgrade
 
     rescue:
 
@@ -36,6 +37,7 @@
 
   - name: Re-add app server to the loadbalancer
     delegate_to: localhost
+    when: upgrade is success
     cs_loadbalancer_rule_member:
       name: balance_http
       vm: "{{ inventory_hostname_short }}"
