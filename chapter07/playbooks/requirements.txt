@@ -1,3 +1,4 @@
+filebrowser-safe==1.0.0
 Mezzanine==4.3.1
 gunicorn
 setproctitle
